@@ -357,7 +357,7 @@ class AwzArtpayHandler extends PaySystem\ServiceHandler implements PaySystem\IRe
 
         }else{
             $data['CODE'] = 200;
-            $message = 'Ошибка платежа';
+            $message = Loc::getMessage('AWZ_ARTPAY_HANDLER_PS_ERR_0');
             if($jsonData['ap_erip_trn_state'] == 'Canceled'){
                 $message = Loc::getMessage('AWZ_ARTPAY_HANDLER_PS_ERR_1');
             }
@@ -422,7 +422,6 @@ class AwzArtpayHandler extends PaySystem\ServiceHandler implements PaySystem\IRe
         return [
             'EP'=>Loc::getMessage('AWZ_ARTPAY_HANDLER_PS_EP'),
             'ER'=>Loc::getMessage('AWZ_ARTPAY_HANDLER_PS_ER')
-            //'CD'=>Loc::getMessage('AWZ_ARTPAY_HANDLER_PS_CD')
         ];
     }
 

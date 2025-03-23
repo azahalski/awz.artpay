@@ -66,13 +66,13 @@ $data = [
         ),
         "KEY1" => array(
             "NAME" => Loc::getMessage("AWZ_ARTPAY_HANDLER_PARAM_KEY1"),
-            "DESCRIPTION" => Loc::getMessage("AWZ_ARTPAY_HANDLER_PARAM_KEY1R_DESC"),
+            "DESCRIPTION" => Loc::getMessage("AWZ_ARTPAY_HANDLER_PARAM_KEY1_DESC"),
             'SORT' => 210,
             'GROUP' => 'GENERAL_SETTINGS',
         ),
         "KEY2" => array(
-            "NAME" => Loc::getMessage("AWZ_ARTPAY_HANDLER_PARAM_KEY1"),
-            "DESCRIPTION" => Loc::getMessage("AWZ_ARTPAY_HANDLER_PARAM_KEY1_DESC"),
+            "NAME" => Loc::getMessage("AWZ_ARTPAY_HANDLER_PARAM_KEY2"),
+            "DESCRIPTION" => Loc::getMessage("AWZ_ARTPAY_HANDLER_PARAM_KEY2_DESC"),
             'SORT' => 220,
             'GROUP' => 'GENERAL_SETTINGS',
         ),

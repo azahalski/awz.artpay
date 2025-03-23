@@ -1,9 +1,5 @@
 <?php
 $MESS["AWZ_ARTPAY_HANDLER_TMPL_DESCRIPTION"] = "Услугу предоставляет сервис онлайн-платежей <b>&laquo;ArtPay&raquo;</b>.<br /><br />Сумма к оплате по счету: ";
-$MESS["AWZ_ARTPAY_HANDLER_TMPL_WARNING_RETURN"] = "<b>Обратите внимание:</b> если вы откажетесь от покупки, для возврата денег вам придется обратиться в магазин.";
-$MESS["AWZ_ARTPAY_HANDLER_TMPL_REDIRECT"] = "вы будете перенаправлены на страницу оплаты";
-$MESS["AWZ_ARTPAY_HANDLER_TMPL_BUTTON_PAID"] = "Оплатить";
-$MESS["AWZ_ARTPAY_HANDLER_TMPL_REDIRECT_MESS"] = "Вы будете перенаправлены на страницу оплаты";
 $MESS['AWZ_ARTPAY_HANDLER_TMPL_ERIP_INSTRUCTION'] = '
 Если Вы осуществляете платеж в кассе банка, пожалуйста, сообщите кассиру о необходимости проведения платежа через ЕРИП.</br>
 <br>
