@@ -3,7 +3,7 @@ use Bitrix\Main\Localization\Loc;
 use Bitrix\Main\IO\File;
 
 \Bitrix\Main\Page\Asset::getInstance()->addCss("/bitrix/themes/.default/sale.css");
-$fileCss = new File(__DIR__.'/style.css');
+$fileCss = new File($_SERVER['DOCUMENT_ROOT'].'/bitrix/modules/awz.artpay/template/style.css');
 
 Loc::loadMessages(__FILE__);
 $sum = round($params['PAYMENT_SHOULD_PAY'], 2);
