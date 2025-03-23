@@ -18,9 +18,21 @@
 
 ## Документация для разработчиков
 
-**Адрес для уведомлений:**
+### Адрес для уведомлений
 
 https://ваш.сайт.ру/bitrix/tools/sale_ps_result.php?service=artpay
+
+### Кастомизация шаблона
+
+Стандартно битрикс будет искать шаблон по путям:
+
+/local/templates/<имя-шаблона-сайта>/payment/awzartpay/template/template.php
+
+/local/templates/.default/payment/awzartpay/template/template.php
+
+/bitrix/templates/<имя-шаблона-сайта>/payment/awzartpay/template/template.php
+
+/bitrix/templates/.default/payment/awzartpay/template/template.php
 
 <!-- dev-end -->
 
