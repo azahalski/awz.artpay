@@ -1,11 +1,13 @@
 # awz.artpay
 
-### [Установка модуля](https://github.com/azahalski/artpay/tree/main/docs/install.md)
+### [Установка модуля](https://github.com/azahalski/awz.artpay/tree/main/docs/install.md)
 
 
 <!-- desc-start -->
 
-Модуль содержит обработчик платежной системы ArtPay.BY.
+Модуль платежной системы ArtPay.BY.
+Обработчик поддерживает оплату через ЕРИП, обеспечивая вашим клиентам простой и безопасный способ совершения платежей. 
+Кроме того, модуль позволяет использовать оплату QR кодами через EPOS, что делает процесс оплаты еще более быстрым и удобным.
 
 **Поддерживаемые редакции CMS Битрикс:**<br>
 «Малый бизнес», «Бизнес», «Корпоративный портал», «Энтерпрайз», «Интернет-магазин + CRM»
@@ -16,14 +18,16 @@
 
 ## Документация для разработчиков
 
+**Адрес для уведомлений:**
 
+https://ваш.сайт.ру/bitrix/tools/sale_ps_result.php?service=artpay
 
 <!-- dev-end -->
 
 <!-- cl-start -->
 ## История версий
 
-https://github.com/zahalski/cookiessett/blob/master/CHANGELOG.md
+https://github.com/azahalski/awz.artpay/blob/master/CHANGELOG.md
 
 <!-- cl-end -->
 
