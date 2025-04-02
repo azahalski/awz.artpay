@@ -9,6 +9,7 @@ use Bitrix\Main\Request;
 use Bitrix\Main\Type\DateTime;
 use Bitrix\Main\Web\HttpClient;
 use Bitrix\Main\Web\Json;
+use Bitrix\Sale\BusinessValue;
 use Bitrix\Sale\PaymentCollection;
 use Bitrix\Sale\PaySystem;
 use Bitrix\Sale\Payment;
@@ -130,7 +131,7 @@ class AwzArtpayHandler extends PaySystem\ServiceHandler implements PaySystem\IRe
             $params['ap_invoice_expire'] = (int) $appInvoiceExpire;
         }
         $params['ap_signature'] = $this->createHash($params, $payment);
-
+        //print_r($params);
         $sendResult = $this->send(
             HttpClient::HTTP_POST,
             $this->getUrl($payment, 'createInvoice'),
@@ -573,7 +574,6 @@ class AwzArtpayHandler extends PaySystem\ServiceHandler implements PaySystem\IRe
      */
     private function verifyRequest(Payment $payment, Request $request): bool
     {
-
         static $verify;
         if (is_null($verify)){
             $verify = false;
@@ -596,5 +596,30 @@ class AwzArtpayHandler extends PaySystem\ServiceHandler implements PaySystem\IRe
             }
         }
         return $verify;
+    }
+
+    /**
+     * @param Payment $payment
+     * @param $code
+     * @return mixed
+     */
+    protected function getBusinessValue(Payment $payment = null, $code)
+    {
+        $defValues = [
+            'USER'=>'600100',
+            'SERVICE_NO'=>'45',
+            'KEY1'=>'EJvay6nrJ',
+            'KEY2'=>'YWUyec4fa',
+            'PAYMENT_DESC'=>Loc::getMessage('AWZ_ARTPAY_HANDLER_PARAM_PAYMENT_DESC_DESC_VAL')
+        ];
+        $value = BusinessValue::get($code, $this->service->getConsumerName(), $payment);
+        if (is_string($value))
+        {
+            $value = trim($value);
+        }
+        if(!$value && isset($defValues[$code])){
+            return $defValues[$code];
+        }
+        return $value;
     }
 }

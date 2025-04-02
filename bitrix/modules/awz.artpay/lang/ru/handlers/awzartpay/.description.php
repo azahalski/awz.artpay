@@ -19,6 +19,7 @@ $MESS["AWZ_ARTPAY_HANDLER_PARAM_PAYMENT_SHOULD_PAY_CURRENCY"] = "Валюта с
 $MESS["AWZ_ARTPAY_HANDLER_PARAM_PAYMENT_ID"] = "Номер оплаты";
 $MESS["AWZ_ARTPAY_HANDLER_PARAM_PAYMENT_DESC"] = "Краткое описание приобретаемых товаров или оказываемых услуг";
 $MESS["AWZ_ARTPAY_HANDLER_PARAM_PAYMENT_DESC_DESC"] = "Можно использовать макросы: #PAYMENT_NUMBER#, #ORDER_NUMBER#, #PAYMENT_ID#, #ORDER_ID#, #USER_EMAIL#";
+$MESS["AWZ_ARTPAY_HANDLER_PARAM_PAYMENT_DESC_DESC_VAL"] = "Оплата заказа #ORDER_NUMBER#";
 $MESS["AWZ_ARTPAY_HANDLER_PARAM_PAYMENT_SROK"] = "Срок действия счета";
 $MESS["AWZ_ARTPAY_HANDLER_PARAM_PAYMENT_SROK_DESC"] = "UNIXTIME или строка для strtotime (например, +1day). При отсутствии данного поля, счет актуален 3 суток. Срок действия счета не может быть меньше 1 часа и больше 1 месяца.";
 $MESS["AWZ_ARTPAY_HANDLER_PARAM_PAYMENT_INSTRUCTION"] = "Путь в дереве услуг";

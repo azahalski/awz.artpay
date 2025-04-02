@@ -10,3 +10,4 @@ $MESS["AWZ_ARTPAY_HANDLER_PS_ERR_0"] = "Ошибка платежа";
 $MESS["AWZ_ARTPAY_HANDLER_PS_ERR_1"] = "Оплата счета сторнирована";
 $MESS["AWZ_ARTPAY_HANDLER_PS_ERR_2"] = "Ошибка оплаты счета";
 $MESS["AWZ_ARTPAY_HANDLER_PS_ERR_3"] = "Ошибка сторнирования оплаты счета";
+$MESS["AWZ_ARTPAY_HANDLER_PARAM_PAYMENT_DESC_DESC_VAL"] = "Оплата заказа #ORDER_NUMBER#";
