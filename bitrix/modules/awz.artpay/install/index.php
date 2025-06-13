@@ -21,10 +21,6 @@ class awz_artpay extends CModule
         $arModuleVersion = array();
         include(__DIR__.'/version.php');
 
-        $dirs = explode('/',dirname(__DIR__ . '../'));
-        $this->MODULE_ID = array_pop($dirs);
-        unset($dirs);
-
         $this->MODULE_VERSION = $arModuleVersion["VERSION"];
         $this->MODULE_VERSION_DATE = $arModuleVersion["VERSION_DATE"];
 
@@ -35,7 +31,6 @@ class awz_artpay extends CModule
 
 		$ps_dir_path = strlen(Option::get('sale', 'path2user_ps_files')) > 3 ? Option::get('sale', 'path2user_ps_files') : '/bitrix/php_interface/include/sale_payment/';
         $this->PAYMENT_HANDLER_PATH = $_SERVER["DOCUMENT_ROOT"] . $ps_dir_path;
-    
 
 		return true;
 	}
@@ -52,11 +47,10 @@ class awz_artpay extends CModule
 
         ModuleManager::RegisterModule($this->MODULE_ID);
 
-        $filePath = dirname(__DIR__ . '/../../').'/options.php';
-
-        if(file_exists($filePath)){
-            LocalRedirect('/bitrix/admin/settings.php?lang='.LANG.'&mid='.$this->MODULE_ID.'&mid_menu=1');
-        }
+        $APPLICATION->IncludeAdminFile(
+            Loc::getMessage("AWZ_ARTPAY_MODULE_NAME"),
+            $_SERVER['DOCUMENT_ROOT'].'/bitrix/modules/'. $this->MODULE_ID .'/install/solution.php'
+        );
 
         return true;
     }
@@ -64,13 +58,29 @@ class awz_artpay extends CModule
     function DoUninstall()
     {
         global $APPLICATION, $step;
-		$this->UnInstallDB();
-		$this->UnInstallFiles();
-		$this->UnInstallEvents();
-		$this->deleteAgents();
 
-		ModuleManager::UnRegisterModule($this->MODULE_ID);
-		return true;
+        $step = intval($step);
+        if($step < 2) {
+            $APPLICATION->IncludeAdminFile(
+                Loc::getMessage('AWZ_ARTPAY_INSTALL_TITLE'),
+                $_SERVER['DOCUMENT_ROOT'].'/bitrix/modules/'. $this->MODULE_ID .'/install/unstep.php'
+            );
+        }
+        elseif($step == 2) {
+            if($_REQUEST['save'] != 'Y' && !isset($_REQUEST['save'])) {
+                $this->UnInstallDB();
+            }
+            $this->UnInstallFiles();
+            $this->UnInstallEvents();
+            $this->deleteAgents();
+
+            if($_REQUEST['saveopts'] != 'Y' && !isset($_REQUEST['saveopts'])) {
+                \Bitrix\Main\Config\Option::delete($this->MODULE_ID);
+            }
+
+            ModuleManager::UnRegisterModule($this->MODULE_ID);
+            return true;
+        }
 		
     }
 
@@ -113,6 +123,7 @@ class awz_artpay extends CModule
     }
 
     function deleteAgents() {
+        CAgent::RemoveModuleAgents("sale");
         return true;
     }
 
