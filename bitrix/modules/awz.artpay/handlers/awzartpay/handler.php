@@ -471,7 +471,7 @@ class AwzArtpayHandler extends PaySystem\ServiceHandler implements PaySystem\IRe
         $result = new ServiceResult();
 
         $httpClient = new HttpClient();
-        $httpClient->disableSslVerification();
+        //$httpClient->disableSslVerification();
         foreach ($headers as $name => $value)
         {
             $httpClient->setHeader($name, $value);
@@ -583,10 +583,15 @@ class AwzArtpayHandler extends PaySystem\ServiceHandler implements PaySystem\IRe
                 $addSignature = $jsonData['ap_signature'];
                 unset($jsonData['ap_signature']);
 
-                uksort($jsonData, 'strnatcmp');
-                $string =  implode(';', $jsonData) . ';' . trim($this->getBusinessValue($payment, 'KEY2'));
-                if(hash("sha512", $string) == $addSignature){
-                    $verify = true;
+                $key2 = trim((string)$this->getBusinessValue($payment, 'KEY2'));
+                if ($key2 === '' || !is_string($addSignature) || strlen($addSignature) !== 128) {
+                    $verify = false;
+                } else {
+                    uksort($jsonData, 'strnatcmp');
+                    $string = implode(';', $jsonData) . ';' . $key2;
+                    if (hash_equals(hash('sha512', $string), strtolower($addSignature))) {
+                        $verify = true;
+                    }
                 }
             }catch (\Exception $e){
                 PaySystem\ErrorLog::add(array(
@@ -605,6 +610,10 @@ class AwzArtpayHandler extends PaySystem\ServiceHandler implements PaySystem\IRe
      */
     protected function getBusinessValue(Payment $payment = null, $code)
     {
+        $isTestMode = $this->isTestMode();
+        /* Тестовые значения с платежной системы
+         * https://artpay.by/docs/paymentStages.html
+        */
         $defValues = [
             'USER'=>'600100',
             'SERVICE_NO'=>'45',
@@ -617,9 +626,12 @@ class AwzArtpayHandler extends PaySystem\ServiceHandler implements PaySystem\IRe
         {
             $value = trim($value);
         }
-        if(!$value && isset($defValues[$code])){
+        if($isTestMode && !$value && isset($defValues[$code]))
             return $defValues[$code];
-        }
+
+        if(!$isTestMode && isset($defValues[$code]) && ($defValues[$code]==$value))
+            return '';
+
         return $value;
     }
 }
