@@ -1,0 +1,169 @@
+{
+  "schema_version": "1.0",
+  "module": {
+    "code": "awz.artpay"
+  },
+  "current_state": {
+    "status": "needs_review",
+    "last_run_id": "awz.artpay-1790662908",
+    "archive_sha256": null,
+    "open_findings": 0,
+    "blocking_findings_open": 0,
+    "false_positive_findings": 1,
+    "accepted_risk_findings": 1,
+    "fixed_findings": 0,
+    "removed_findings": 0,
+    "total_findings": 2
+  },
+  "runs": [
+    {
+      "run_id": "awz.artpay-1790662908",
+      "created_at": "2026-09-29T06:23:01+00:00",
+      "archive_sha256": null,
+      "scanner_request_id": "awz.artpay-1790662908",
+      "input_summary": "Обнаружено 2 уязвимости в 2 файлах при анализе 15 файлов модуля awz.artpay. Максимальная severity: low. Модуль является платёжным обработчиком (ArtPay.by/ЕРИП), работает через стандартный механизм Bitrix Sale Handlers. Аутентификация обеспечивается фреймворком Bitrix. Подпись запросов реализована корректно через hash_equals() + SHA-512. SSL-верификация корректно включена (вызов disableSslVerification закомментирован на line 474). Десериализация имеет защиту allowed_classes => false. Захардкоженные ключи API являются короткими дефолтными значениями и переопределяются настройками.",
+      "summary": {
+        "current_scan_findings": 2,
+        "severity_counts": {
+          "low": 2
+        },
+        "new_findings": 2,
+        "still_open_findings": 0,
+        "reopened_findings": 0,
+        "resolved_since_previous_run": 0
+      }
+    }
+  ],
+  "findings": [
+    {
+      "journal_finding_id": "JF-00001",
+      "fingerprint": "05cd22c406f6e838262ee32483083642",
+      "type": "Insecure Deserialization",
+      "severity": "low",
+      "status": "accepted_risk",
+      "first_seen_run_id": "awz.artpay-1790662908",
+      "last_seen_run_id": "awz.artpay-1790662908",
+      "resolved_run_id": null,
+      "original_location": {
+        "file": "handlers/awzartpay/handler.php",
+        "line": "52"
+      },
+      "current_location": {
+        "file": "handlers/awzartpay/handler.php",
+        "line": "52"
+      },
+      "latest_vulnerability": {
+        "file": "handlers/awzartpay/handler.php",
+        "line": "52",
+        "type": "Insecure Deserialization",
+        "severity": "low",
+        "description": "Подозрение: unserialize() вызывается для данных PAY_RETURN_COMMENT из таблицы БД (line 52). Источник — self-serialized данные, которые модуль записывает сам в эту же строку через serialize() на line 74. Митигация: опция allowed_classes => false уже присутствует. Паттерн считается LOW как defense-in-depth: если когда-либо появится вектор записи произвольного значения в PAY_RETURN_COMMENT (например, через IDOR или SQLi), unserialize без контроля классов будет уязвим к POP-цепочкам.",
+        "recommendation": "Заменить serialize/unserialize на json_encode/json_decode. Если unserialize необходим, оставить allowed_classes => false и добавить проверку контрольной суммы/integrity данных перед десериализацией.",
+        "fix": "Before:\n$invoiceData = unserialize($payment->getField('PAY_RETURN_COMMENT'), ['allowed_classes' => false]);\n\nAfter:\n$rawComment = $payment->getField('PAY_RETURN_COMMENT');\nif ($rawComment) {\n    $invoiceData = json_decode($rawComment, true);\n} else {\n    $invoiceData = [];\n}",
+        "reviewed": {
+          "oldSeverity": "low",
+          "newSeverity": "low",
+          "changed": false,
+          "category": "kept-as-reported",
+          "versionScope": "current",
+          "version": "current",
+          "currentVersionRelevance": "present-in-current-scan",
+          "action": "fix",
+          "confidence": "medium",
+          "rationale": "Severity left unchanged after review; no stronger Bitrix/BUS-specific downgrade condition was identified from the journal text alone."
+        },
+        "partner_disposition": {
+          "status": "accepted_risk",
+          "note": "",
+          "author": "Andrew Zahalski",
+          "updated_at": "2026-09-29T06:28:25+00:00"
+        }
+      },
+      "events": [
+        {
+          "run_id": "awz.artpay-1790662908",
+          "event": "detected",
+          "at": "2026-09-29T06:23:01+00:00",
+          "location": {
+            "file": "handlers/awzartpay/handler.php",
+            "line": "52"
+          },
+          "status": "open"
+        },
+        {
+          "run_id": "awz.artpay-1790662908",
+          "event": "partner_disposition_updated",
+          "at": "2026-09-29T06:28:25+00:00",
+          "status": "accepted_risk",
+          "note": "",
+          "author": "Andrew Zahalski"
+        }
+      ]
+    },
+    {
+      "journal_finding_id": "JF-00002",
+      "fingerprint": "c4ed28b9b6027a880f17d7d11e69ed6b",
+      "type": "Information Disclosure",
+      "severity": "low",
+      "status": "false_positive",
+      "first_seen_run_id": "awz.artpay-1790662908",
+      "last_seen_run_id": "awz.artpay-1790662908",
+      "resolved_run_id": null,
+      "original_location": {
+        "file": "handlers/awzartpay/.description.php",
+        "line": "76,88"
+      },
+      "current_location": {
+        "file": "handlers/awzartpay/.description.php",
+        "line": "76,88"
+      },
+      "latest_vulnerability": {
+        "file": "handlers/awzartpay/.description.php",
+        "line": "76,88",
+        "type": "Information Disclosure",
+        "severity": "low",
+        "description": "Подозрение: захардкоженные ключи API шлюза ArtPay по умолчанию (KEY1 = 'EJvay6nrJ', KEY2 = 'YWUyec4fa') указаны непосредственно в файле описания платежного обработчика (lines 76-83, 88-94). Эти 7-символьные строки — секренты подписи запросов и ответов. Хотя они переопределяются BusinessValue::get() при реальной конфигурации (handler.php:624) и заменяются пустой строкой в продакшене (handler.php:633), сами литералы остаются видны в коде. При отсутствии пользовательской настройки модуль может использовать эти дефолтные ключи с тестового режима.",
+        "recommendation": "Удалить дефолтные значения KEY1/KEY2 из .description.php. Использовать пустые строки '' в DEFAULT вместо реальных ключей. Реальные ключи должны задаваться только через админ-панель Bitrix (BusinessValue) и храниться в таблице b_option, а не в исходном коде.",
+        "fix": "Before:\n\"KEY1\" => [\n    ...\n    'DEFAULT' => [\n        'PROVIDER_VALUE' => 'EJvay6nrJ',\n        'PROVIDER_KEY' => 'VALUE'\n    ]\n],\n\"KEY2\" => [\n    ...\n    'DEFAULT' => [\n        'PROVIDER_VALUE' => 'YWUyec4fa',\n        'PROVIDER_KEY' => 'VALUE'\n    ]\n],\n\nAfter:\n\"KEY1\" => [\n    ...\n    'DEFAULT' => [\n        'PROVIDER_VALUE' => '',\n        'PROVIDER_KEY' => 'VALUE'\n    ]\n],\n\"KEY2\" => [\n    ...\n    'DEFAULT' => [\n        'PROVIDER_VALUE' => '',\n        'PROVIDER_KEY' => 'VALUE'\n    ]\n],",
+        "reviewed": {
+          "oldSeverity": "low",
+          "newSeverity": "low",
+          "changed": false,
+          "category": "kept-as-reported",
+          "versionScope": "current",
+          "version": "current",
+          "currentVersionRelevance": "present-in-current-scan",
+          "action": "fix",
+          "confidence": "medium",
+          "rationale": "Severity left unchanged after review; no stronger Bitrix/BUS-specific downgrade condition was identified from the journal text alone."
+        },
+        "partner_disposition": {
+          "status": "false_positive",
+          "note": "Это демо ключи",
+          "author": "Andrew Zahalski",
+          "updated_at": "2026-09-29T06:28:25+00:00"
+        }
+      },
+      "events": [
+        {
+          "run_id": "awz.artpay-1790662908",
+          "event": "detected",
+          "at": "2026-09-29T06:23:01+00:00",
+          "location": {
+            "file": "handlers/awzartpay/.description.php",
+            "line": "76,88"
+          },
+          "status": "open"
+        },
+        {
+          "run_id": "awz.artpay-1790662908",
+          "event": "partner_disposition_updated",
+          "at": "2026-09-29T06:28:25+00:00",
+          "status": "false_positive",
+          "note": "Это демо ключи",
+          "author": "Andrew Zahalski"
+        }
+      ]
+    }
+  ]
+}

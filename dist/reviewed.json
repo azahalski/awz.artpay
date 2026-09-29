@@ -1,0 +1,123 @@
+{
+  "success": true,
+  "requestId": "awz.artpay-1790662908",
+  "data": {
+    "vulnerabilities": [
+      {
+        "file": "handlers/awzartpay/handler.php",
+        "line": "52",
+        "type": "Insecure Deserialization",
+        "severity": "low",
+        "description": "Подозрение: unserialize() вызывается для данных PAY_RETURN_COMMENT из таблицы БД (line 52). Источник — self-serialized данные, которые модуль записывает сам в эту же строку через serialize() на line 74. Митигация: опция allowed_classes => false уже присутствует. Паттерн считается LOW как defense-in-depth: если когда-либо появится вектор записи произвольного значения в PAY_RETURN_COMMENT (например, через IDOR или SQLi), unserialize без контроля классов будет уязвим к POP-цепочкам.",
+        "recommendation": "Заменить serialize/unserialize на json_encode/json_decode. Если unserialize необходим, оставить allowed_classes => false и добавить проверку контрольной суммы/integrity данных перед десериализацией.",
+        "fix": "Before:\n$invoiceData = unserialize($payment->getField('PAY_RETURN_COMMENT'), ['allowed_classes' => false]);\n\nAfter:\n$rawComment = $payment->getField('PAY_RETURN_COMMENT');\nif ($rawComment) {\n    $invoiceData = json_decode($rawComment, true);\n} else {\n    $invoiceData = [];\n}",
+        "reviewed": {
+          "oldSeverity": "low",
+          "newSeverity": "low",
+          "changed": false,
+          "category": "kept-as-reported",
+          "versionScope": "current",
+          "version": "current",
+          "currentVersionRelevance": "present-in-current-scan",
+          "action": "fix",
+          "confidence": "medium",
+          "rationale": "Severity left unchanged after review; no stronger Bitrix/BUS-specific downgrade condition was identified from the journal text alone."
+        },
+        "partner_disposition": {
+          "status": "accepted_risk",
+          "note": "",
+          "author": "Andrew Zahalski",
+          "updated_at": "2026-09-29T06:28:25+00:00"
+        }
+      },
+      {
+        "file": "handlers/awzartpay/.description.php",
+        "line": "76,88",
+        "type": "Information Disclosure",
+        "severity": "low",
+        "description": "Подозрение: захардкоженные ключи API шлюза ArtPay по умолчанию (KEY1 = 'EJvay6nrJ', KEY2 = 'YWUyec4fa') указаны непосредственно в файле описания платежного обработчика (lines 76-83, 88-94). Эти 7-символьные строки — секренты подписи запросов и ответов. Хотя они переопределяются BusinessValue::get() при реальной конфигурации (handler.php:624) и заменяются пустой строкой в продакшене (handler.php:633), сами литералы остаются видны в коде. При отсутствии пользовательской настройки модуль может использовать эти дефолтные ключи с тестового режима.",
+        "recommendation": "Удалить дефолтные значения KEY1/KEY2 из .description.php. Использовать пустые строки '' в DEFAULT вместо реальных ключей. Реальные ключи должны задаваться только через админ-панель Bitrix (BusinessValue) и храниться в таблице b_option, а не в исходном коде.",
+        "fix": "Before:\n\"KEY1\" => [\n    ...\n    'DEFAULT' => [\n        'PROVIDER_VALUE' => 'EJvay6nrJ',\n        'PROVIDER_KEY' => 'VALUE'\n    ]\n],\n\"KEY2\" => [\n    ...\n    'DEFAULT' => [\n        'PROVIDER_VALUE' => 'YWUyec4fa',\n        'PROVIDER_KEY' => 'VALUE'\n    ]\n],\n\nAfter:\n\"KEY1\" => [\n    ...\n    'DEFAULT' => [\n        'PROVIDER_VALUE' => '',\n        'PROVIDER_KEY' => 'VALUE'\n    ]\n],\n\"KEY2\" => [\n    ...\n    'DEFAULT' => [\n        'PROVIDER_VALUE' => '',\n        'PROVIDER_KEY' => 'VALUE'\n    ]\n],",
+        "reviewed": {
+          "oldSeverity": "low",
+          "newSeverity": "low",
+          "changed": false,
+          "category": "kept-as-reported",
+          "versionScope": "current",
+          "version": "current",
+          "currentVersionRelevance": "present-in-current-scan",
+          "action": "fix",
+          "confidence": "medium",
+          "rationale": "Severity left unchanged after review; no stronger Bitrix/BUS-specific downgrade condition was identified from the journal text alone."
+        },
+        "partner_disposition": {
+          "status": "false_positive",
+          "note": "Это демо ключи",
+          "author": "Andrew Zahalski",
+          "updated_at": "2026-09-29T06:28:25+00:00"
+        }
+      }
+    ],
+    "summary": "Обнаружено 2 уязвимости в 2 файлах при анализе 15 файлов модуля awz.artpay. Максимальная severity: low. Модуль является платёжным обработчиком (ArtPay.by/ЕРИП), работает через стандартный механизм Bitrix Sale Handlers. Аутентификация обеспечивается фреймворком Bitrix. Подпись запросов реализована корректно через hash_equals() + SHA-512. SSL-верификация корректно включена (вызов disableSslVerification закомментирован на line 474). Десериализация имеет защиту allowed_classes => false. Захардкоженные ключи API являются короткими дефолтными значениями и переопределяются настройками.",
+    "scannedFiles": 15,
+    "riskLevel": "low",
+    "auditedFiles": [
+      "handlers/awzartpay/.description.php",
+      "handlers/awzartpay/handler.php",
+      "install/handlers/awzartpay/.description.php",
+      "install/handlers/awzartpay/handler.php",
+      "install/handlers/awzartpay/template/template.php",
+      "install/index.php",
+      "install/solution.php",
+      "install/unstep.php",
+      "install/version.php",
+      "lang/ru/handlers/awzartpay/.description.php",
+      "lang/ru/handlers/awzartpay/handler.php",
+      "lang/ru/install/index.php",
+      "lang/ru/template/template.php",
+      "template/template.php",
+      "include.php"
+    ],
+    "reviewSummary": {
+      "reviewedAt": "2026-09-29",
+      "method": "BUS-aware triage: preserve original finding fields except severity, add reviewed node with old severity and rationale.",
+      "totals": {
+        "vulnerabilities": 2,
+        "changedSeverity": 0,
+        "unchangedSeverity": 2
+      },
+      "rawSeverityCounts": {
+        "low": 2
+      },
+      "reviewedSeverityCounts": {
+        "low": 2
+      },
+      "currentScope": {
+        "total": 2,
+        "rawSeverityCounts": {
+          "low": 2
+        },
+        "reviewedSeverityCounts": {
+          "low": 2
+        },
+        "reviewedCategories": {
+          "kept-as-reported": 2
+        }
+      },
+      "historicalUpdatePackages": {
+        "total": 0,
+        "rawSeverityCounts": {},
+        "reviewedSeverityCounts": {},
+        "reviewedCategories": {}
+      },
+      "caveats": [
+        "Type, file, line, description, recommendation and fix are preserved from the source journal.",
+        "Severity is replaced with reviewed triage severity."
+      ]
+    },
+    "feedbackSummary": {
+      "updatedAt": "2026-09-29T06:28:25+00:00",
+      "applied": 2
+    }
+  }
+}
