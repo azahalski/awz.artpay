@@ -78,7 +78,7 @@ $data = [
             'SORT' => 210,
             'GROUP' => 'GENERAL_SETTINGS',
             'DEFAULT' => [
-                'PROVIDER_VALUE' => 'EJvay6nrJ',
+                'PROVIDER_VALUE' => '',
                 'PROVIDER_KEY' => 'VALUE'
             ]
         ],
@@ -88,7 +88,7 @@ $data = [
             'SORT' => 220,
             'GROUP' => 'GENERAL_SETTINGS',
             'DEFAULT' => [
-                'PROVIDER_VALUE' => 'YWUyec4fa',
+                'PROVIDER_VALUE' => '',
                 'PROVIDER_KEY' => 'VALUE'
             ]
         ],
