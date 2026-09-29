@@ -7,9 +7,9 @@ $MESS["AWZ_ARTPAY_HANDLER_REFERRER"] = "<a href=\"https://artpay.by/join/?utm_so
 $MESS['AWZ_ARTPAY_HANDLER_NAME'] = 'ArtPay.BY';
 $MESS['AWZ_ARTPAY_HANDLER_PARAM_USER'] = 'Идентификатор точки обслуживания';
 $MESS['AWZ_ARTPAY_HANDLER_PARAM_USER_DESC'] = '';
-$MESS['AWZ_ARTPAY_HANDLER_PARAM_KEY1'] = 'Ключевая фраза для подписи запросов магазина';
+$MESS['AWZ_ARTPAY_HANDLER_PARAM_KEY1'] = 'Ключевая фраза для подписи запросов магазина (тестовый режим - EJvay6nrJ)';
 $MESS['AWZ_ARTPAY_HANDLER_PARAM_KEY1_DESC'] = '';
-$MESS['AWZ_ARTPAY_HANDLER_PARAM_KEY2'] = 'Ключевая фраза для подписи ответов шлюза';
+$MESS['AWZ_ARTPAY_HANDLER_PARAM_KEY2'] = 'Ключевая фраза для подписи ответов шлюза (тестовый режим - YWUyec4fa)';
 $MESS['AWZ_ARTPAY_HANDLER_PARAM_KEY2_DESC'] = '';
 $MESS['AWZ_ARTPAY_HANDLER_PARAM_SERVICE_NO'] = 'Номер услуги в системе ЕРИП';
 $MESS['AWZ_ARTPAY_HANDLER_PARAM_SERVICE_NO_DESC'] = 'Является обязательным, если у продавца зарегистрировано более 1 услуги в ЕРИП. При отсутствии будет использован номер услуги, указанный в системе по умолчанию.';

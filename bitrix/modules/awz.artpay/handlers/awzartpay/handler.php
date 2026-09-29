@@ -34,6 +34,8 @@ class AwzArtpayHandler extends PaySystem\ServiceHandler implements PaySystem\IRe
     const TEST_URL = 'https://api-test-artpay.dev-3c.by/v2/';
     const ACTIVE_URL = 'https://api.artpay.by/v2/';
 
+    private ?bool $isTestModeCache = null;
+
     /**
      * @param Payment $payment
      * @param Request|null $request
@@ -441,7 +443,13 @@ class AwzArtpayHandler extends PaySystem\ServiceHandler implements PaySystem\IRe
      */
     protected function isTestMode(Payment $payment = null): bool
     {
-        return ($this->getBusinessValue($payment, 'PS_IS_TEST') == 'Y');
+        if ($this->isTestModeCache === null) {
+            // читаем значение напрямую, минуя getBusinessValue(): иначе взаимная
+            // рекурсия isTestMode() <-> getBusinessValue() уводит запрос в фатал
+            $value = BusinessValue::get('PS_IS_TEST', $this->service->getConsumerName(), $payment);
+            $this->isTestModeCache = (trim((string)$value) === 'Y');
+        }
+        return $this->isTestModeCache;
     }
 
     /**
@@ -617,8 +625,8 @@ class AwzArtpayHandler extends PaySystem\ServiceHandler implements PaySystem\IRe
         $defValues = [
             'USER'=>'600100',
             'SERVICE_NO'=>'45',
-            'KEY1'=>'EJvay6nrJ',
-            'KEY2'=>'YWUyec4fa',
+            //'KEY1'=>'EJvay6nrJ',
+            //'KEY2'=>'YWUyec4fa',
             'PAYMENT_DESC'=>Loc::getMessage('AWZ_ARTPAY_HANDLER_PARAM_PAYMENT_DESC_DESC_VAL')
         ];
         $value = BusinessValue::get($code, $this->service->getConsumerName(), $payment);
